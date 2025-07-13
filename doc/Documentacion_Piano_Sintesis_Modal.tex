@@ -1,0 +1,62 @@
+
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\usepackage{titlesec}
+\titleformat{\section}{\Large\bfseries}{\thesection}{1em}{}
+\title{Documentación del Proyecto de Piano por Síntesis Modal}
+\date{\today}
+\begin{document}
+
+\maketitle
+
+\section*{Resumen}
+Este documento resume el desarrollo de un motor de piano virtual basado en síntesis modal, incluyendo modelado de cuerdas con inarmonía, resonancia simpática entre cuerdas, resonancia y modos de la tabla armónica, y una arquitectura de síntesis polifónica en tiempo real controlada mediante entrada MIDI.
+
+\section{1. Objetivo General}
+Desarrollar un motor de síntesis modal de piano, modelando cuerdas, resonancia simpática, tabla armónica, resonancia cruzada soundboard $\rightarrow$ cuerdas, y polifonía en tiempo real usando entrada MIDI.
+
+\section{2. Módulos creados}
+\begin{itemize}
+  \item \texttt{realistic\_modal\_synthesis.py}: modela cuerdas con inarmonía empírica.
+  \item \texttt{sympathetic\_resonance.py}: simula cuerdas libres que vibran por armónicos cercanos.
+  \item \texttt{soundboard\_model.py}: modela modos de la tabla armónica y su respuesta.
+  \item \texttt{soundboard\_sympathetic.py}: simula cuerdas libres activadas por la tabla.
+  \item \texttt{midi\_interface.py}: conexión en tiempo real con teclados MIDI.
+  \item \texttt{piano\_engine.py}: integración de todo lo anterior en modo offline polifónico.
+  \item \texttt{realtime\_engine.py}: arquitectura real-time con voces independientes por nota (NoteVoice + AudioEngine).
+\end{itemize}
+
+\section{3. Avance Real-Time}
+Se construyó una arquitectura basada en \texttt{NoteVoice} (una voz por nota con buffer independiente) y \texttt{AudioEngine} (mezcla todas las voces en un callback de \texttt{sounddevice}). Esto permite ejecución polifónica sin recalcular toda la textura sonora en cada evento MIDI.
+
+\section{4. Integración MIDI}
+Con \texttt{midi\_interface.py} se recibe en tiempo real desde un teclado. Se ejecuta el motor de síntesis desde consola, y responde en milisegundos por cada evento de nota o pedal. Ejemplo:
+
+\begin{verbatim}
+from piano_engine import PianoEngine
+from midi_interface import MIDIEngineInterface
+
+engine = PianoEngine()
+midi = MIDIEngineInterface(engine)
+midi.start()
+\end{verbatim}
+
+\section{5. Archivos exportados}
+\begin{itemize}
+  \item \texttt{midi\_interface.py}
+  \item \texttt{piano\_engine.py}
+  \item \texttt{realtime\_engine.py}
+  \item \texttt{soundboard\_sympathetic.py}
+\end{itemize}
+
+\section{6. Próximos pasos}
+\begin{itemize}
+  \item Agregar \texttt{SympatheticEngine} en tiempo real.
+  \item Integrar \texttt{SoundboardEngine} con respuestas tabla $\rightarrow$ cuerdas.
+  \item Control de sustain más fino (por nota, liberación condicional).
+  \item Optimizar uso de CPU para ejecución sostenida continua.
+\end{itemize}
+
+\end{document}
