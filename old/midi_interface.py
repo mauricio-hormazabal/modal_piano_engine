@@ -45,4 +45,4 @@ class MIDIEngineInterface:
             self.piano_engine.handle_note_off(msg.note)
         elif msg.type == 'control_change' and msg.control == 64:  # Sustain pedal
             self.sustain = msg.value >= 64
-            self.piano_engine.handle_sustain(self.sustain)
+            self.piano_engine.handle_sustain(self.sustain) #
