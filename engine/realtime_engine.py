@@ -9,7 +9,7 @@ from core.base_synthesis import generate_realistic_modal_signal
 from core.sympathetic_resonance import generate_sympathetic_response
 from scipy.signal import lfilter, butter
 
-from .util.engine_functions import precalculate_inharmonicity_matrix, precalculate_hammer_shape_matrix, adaptive_num_modes, precalculate_hammer_gain_decay
+from .util.engine_functions import precalculate_inharmonicity_matrix, precalculate_hammer_shape_matrix, adaptive_num_modes, precalculate_gain_decay
 
 
 
@@ -48,13 +48,13 @@ class AudioEngine:
         self.inharmonicity_matrix = precalculate_inharmonicity_matrix()
         self.inharmonicity_matrix_res = precalculate_inharmonicity_matrix(0.0001) # B=0.0001
         self.hammer_matrix = precalculate_hammer_shape_matrix()
-        self.hammer_gain_decay = precalculate_hammer_gain_decay()
+        self.hammer_gain_decay = precalculate_gain_decay()
         #notas activas
         self.active_notes = []
         self.modal_bank = modalBank(
             samplerate=fs, 
             duration=2.5, 
-            num_modes=14
+            num_modes=14 #debe coincidir con adaptive num modes
         )
 
         self.stream = sd.OutputStream(
@@ -101,7 +101,9 @@ class AudioEngine:
             
 
             resonance = generate_sympathetic_response(self.fs, midi_note, velocity, 
-                                                      self.active_notes, self.inharmonicity_matrix_res, gain=0.003) #gain original 0.01
+                                                      self.active_notes, self.inharmonicity_matrix_res,
+                                                      gd_values=self.hammer_gain_decay, 
+                                                      gain=0.01) #gain original 0.01 #0.05 Ok
 
 
             b_sb, a_sb = butter(N=2, Wn=[80, 2000], btype='bandpass', fs=self.fs)

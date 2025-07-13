@@ -17,9 +17,10 @@ def find_resonant_free_notes(midi_note, free_notes, harmonic_range=10, tolerance
 
 def generate_sympathetic_response(fs, midi_note, velocity, active_notes, 
                                   inh_matrix = [],
+                                  gd_values = [],
                                   gain=0.01, #0.01 gain, HR=10, NM=10, DEC=3.5
                                   harmonic_range=6, tolerance=0.02,
-                                  num_modes=4, decay=1.5): #3.5 decay
+                                  num_modes=6, decay=1.5): #3.5 decay
 
     duration = estimated_duration(midi_note, velocity)
     t = np.linspace(0, duration, int(fs * duration)) # ver como calcular esto en forma mas precisa.
@@ -44,7 +45,8 @@ def generate_sympathetic_response(fs, midi_note, velocity, active_notes,
         for n in range(1, num_modes + 1):
             f_n = f0 * n * inh_matrix[midi_note][n]
             alpha = decay * n
-            A = gain / n  #(1.0 / n) * np.exp(-0.3 * n) * velocity
+            #A = gain / n  #(1.0 / n) * np.exp(-0.3 * n) * velocity # gain*pre-g*velocity
+            A = gain * gd_values[n] * velocity
             mode = A * np.exp(-alpha * t) * np.cos(2 * np.pi * f_n * t + phase)
             response += mode
 

@@ -70,7 +70,7 @@ def precalculate_hammer_shape_matrix():
     
     return matrix
 
-def precalculate_hammer_gain_decay():
+def precalculate_gain_decay():
     n_values = range(1, 15)
     gd = {}
     for n in n_values:
@@ -89,8 +89,8 @@ def hammer_contact_point_steinway(midi_note):
 def hammer_contact_point_yamaha(midi_note):
     return 0.11 + (midi_note / 127.0) * 0.015
 
-def hammer_contact_point_yamaha(midi_note):
-    return 0.11 + (midi_note / 127.0) * 0.015
+def hammer_contact_point_bosendorfer(midi_note):
+    return 0.11 + (midi_note / 127.0) * 0.023
 
 
 # Adapta el numero de modos de cada nota según rango en que se encuentra.

@@ -19,6 +19,8 @@ def generate_realistic_modal_signal(midi_note, fs,
     signal = np.zeros_like(t)
     phase = np.pi / 2 
 
+ 
+
     for n in range(1, num_modes + 1):
         
        #f_n = f0 * n * inh_matrix[midi_note][n] ##  inharmonicity precalculada
@@ -34,6 +36,7 @@ def generate_realistic_modal_signal(midi_note, fs,
         alpha = base_alpha * (1 + 0.15 * n)
         #signal += A * np.exp(-alpha * t) * np.cos(2 * np.pi * f_n * t + phase)
         signal += A * np.exp(-alpha * t) * mod_bank.get_mode_wave(midi_note, n) #prueba precomputed
+
         #signal += A * np.exp(-alpha * t) * np.sin(2 * np.pi * f_n * t)
 
     """
