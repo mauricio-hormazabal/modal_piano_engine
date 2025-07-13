@@ -1,8 +1,8 @@
 import numpy as np
 from scipy.io.wavfile import write
-from sympathetic_resonance2 import generate_sympathetic_response
+from sympathetic_resonance import generate_sympathetic_response
 from soundboard_model import simulate_soundboard_response, extract_excited_soundboard_modes
-from soundboard_sympathetic2 import excite_free_strings_via_soundboard, find_strings_resonant_with_soundboard_modes
+from soundboard_sympathetic import excite_free_strings_via_soundboard, find_strings_resonant_with_soundboard_modes
 
 def hammer_contact_point(midi_note):
     return 0.10 + (midi_note / 127.0) * 0.13
