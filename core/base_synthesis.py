@@ -13,7 +13,7 @@ def generate_realistic_modal_signal(midi_note, fs,
     
     f0 = midi_to_freq(midi_note)
     #duration = estimated_duration(midi_note, velocity)
-    duration = 2.0 #prueba precomputed, se deberia obtener del mismo modal bank.
+    duration = 2.5 #prueba precomputed, se deberia obtener del mismo modal bank.
     #t = np.linspace(0, duration, int(fs * duration)) #prueba precomputed
     t = mod_bank.get_time_vector() #prueba precomputed
     signal = np.zeros_like(t)

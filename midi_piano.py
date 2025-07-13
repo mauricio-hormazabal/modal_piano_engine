@@ -5,7 +5,7 @@ import time
 
 class PianoWrapper:
     def __init__(self):
-        self.engine = AudioEngine(use_soft_clip=True, blocksize=512, fs=11025)
+        self.engine = AudioEngine(use_soft_clip=True, blocksize=1024, fs=44100)
 
     def handle_note_on(self, midi_note, velocity):
         self.engine.note_on(midi_note, velocity)

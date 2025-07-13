@@ -2,9 +2,9 @@ import numpy as np
 import sounddevice as sd
 from collections import defaultdict
 from core.base_synthesis import generate_realistic_modal_signal, generate_sympathetic_response
-from core.sympathetic_resonance2 import generate_sympathetic_response
+from core.sympathetic_resonance import generate_sympathetic_response
 from core.soundboard_model import simulate_soundboard_response, extract_excited_soundboard_modes
-from core.soundboard_sympathetic2 import excite_free_strings_via_soundboard, find_strings_resonant_with_soundboard_modes
+from core.soundboard_sympathetic import excite_free_strings_via_soundboard, find_strings_resonant_with_soundboard_modes
 
 class PianoEngine:
     def __init__(self, fs=44100, duration=2.0):

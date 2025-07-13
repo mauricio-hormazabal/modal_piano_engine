@@ -53,7 +53,7 @@ class AudioEngine:
         self.active_notes = []
         self.modal_bank = modalBank(
             samplerate=fs, 
-            duration=2.0, 
+            duration=2.5, 
             num_modes=14
         )
 
@@ -104,10 +104,9 @@ class AudioEngine:
                                                       self.active_notes, self.inharmonicity_matrix_res, gain=0.003) #gain original 0.01
 
 
-            #b_cb, a_cb = butter(N=2, Wn=450, btype='low', fs=self.fs)
-            #resonance = lfilter(b_cb, a_cb, resonance)
-            #signal = lfilter(b_cb, a_cb, signal)
-
+            b_sb, a_sb = butter(N=2, Wn=[80, 2000], btype='bandpass', fs=self.fs)
+            signal= lfilter(b_sb, a_sb, signal)
+            resonance = lfilter(b_sb, a_sb, resonance)
             """"      
             b_sb, a_sb = butter(N=2, Wn=[80, 2000], btype='bandpass', fs=self.fs)
             b_cb, a_cb = butter(N=2, Wn=150, btype='low', fs=self.fs)
