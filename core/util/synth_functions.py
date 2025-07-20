@@ -26,7 +26,7 @@ def base_damping_for_note(midi_note):
     else:
         return 6.0
     
-def attack_envelope(fs, duration, velocity, fade_min=0.002, fade_max=0.008): # min = 0.002 y max= 0.01
+def attack_envelope(fs, duration, velocity, fade_min=0.0005, fade_max=0.002): # min = 0.002 y max= 0.008
     """
     Devuelve un vector de envolvente de ataque basado en la velocidad.
     - velocity: entre 0 y 1

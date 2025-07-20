@@ -38,13 +38,14 @@ class NoteVoice:
 
 # === Motor de Audio Optimizado ===
 class AudioEngine:
-    def __init__(self, fs=44100, blocksize=1024, use_soft_clip=False):
+    def __init__(self, fs=44100, blocksize=2048, use_soft_clip=False):
         self.fs = fs
         self.blocksize = blocksize
         self.use_soft_clip = use_soft_clip
         self.voices = []
         self.lock = threading.Lock()
         self.note_queue = Queue()
+        # Pre carga
         self.inharmonicity_matrix = precalculate_inharmonicity_matrix()
         self.inharmonicity_matrix_res = precalculate_inharmonicity_matrix(0.0001) # B=0.0001
         self.hammer_matrix = precalculate_hammer_shape_matrix()
@@ -103,12 +104,12 @@ class AudioEngine:
             resonance = generate_sympathetic_response(self.fs, midi_note, velocity, 
                                                       self.active_notes, self.inharmonicity_matrix_res,
                                                       gd_values=self.hammer_gain_decay, 
-                                                      gain=0.01) #gain original 0.01 #0.05 Ok
+                                                      mod_bank=self.modal_bank,
+                                                      gain=0.012) #gain original 0.01 #0.05 Ok
 
+            #b_cb, a_cb = butter(N=2, Wn=2050, btype='low', fs=self.fs)
+            #signal_res_cab = lfilter(b_cb, a_cb, (resonance + signal))
 
-            b_sb, a_sb = butter(N=2, Wn=[80, 2000], btype='bandpass', fs=self.fs)
-            signal= lfilter(b_sb, a_sb, signal)
-            resonance = lfilter(b_sb, a_sb, resonance)
             """"      
             b_sb, a_sb = butter(N=2, Wn=[80, 2000], btype='bandpass', fs=self.fs)
             b_cb, a_cb = butter(N=2, Wn=150, btype='low', fs=self.fs)
@@ -119,9 +120,11 @@ class AudioEngine:
 
             voice = NoteVoice(midi_note, velocity, self.fs, signal)
             res_voice = NoteVoice(midi_note, velocity, self.fs, resonance)
+            #rc_voice = NoteVoice(midi_note, velocity, self.fs, signal_res_cab)
             with self.lock:
                 self.voices.append(voice)
                 self.voices.append(res_voice)
+                #self.voices.append(rc_voice)
 
     def callback(self, outdata, frames, time_info, status):
         buffer = np.zeros(frames)
@@ -129,7 +132,5 @@ class AudioEngine:
             for voice in self.voices:
                 buffer += voice.get_samples(frames)
             self.voices = [v for v in self.voices if not v.done]
-            
-        #buffer = normalize_audio(buffer, soft_clip=self.use_soft_clip)
-        #buffer = soft_limiter(buffer, 0.8)
+
         outdata[:, 0] = buffer

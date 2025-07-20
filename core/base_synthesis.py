@@ -13,7 +13,7 @@ def generate_realistic_modal_signal(midi_note, fs,
     
     f0 = midi_to_freq(midi_note)
     #duration = estimated_duration(midi_note, velocity)
-    duration = 2.5 #prueba precomputed, se deberia obtener del mismo modal bank.
+    duration = mod_bank.get_duration() #prueba precomputed, se deberia obtener del mismo modal bank.
     #t = np.linspace(0, duration, int(fs * duration)) #prueba precomputed
     t = mod_bank.get_time_vector() #prueba precomputed
     signal = np.zeros_like(t)
@@ -37,21 +37,9 @@ def generate_realistic_modal_signal(midi_note, fs,
         #signal += A * np.exp(-alpha * t) * np.cos(2 * np.pi * f_n * t + phase)
         signal += A * np.exp(-alpha * t) * mod_bank.get_mode_wave(midi_note, n) #prueba precomputed
 
-        #signal += A * np.exp(-alpha * t) * np.sin(2 * np.pi * f_n * t)
 
-    """
-    # Cortar la señal si cae por debajo de cierto umbral (e.g., -60 dB)
-    rms = np.sqrt(np.mean(signal**2))
-    if rms > 0:
-        threshold_lin = 10**(silence_db_threshold / 20)
-        above = np.abs(signal) > threshold_lin
-        if np.any(above):
-            last_idx = np.max(np.where(above))
-            signal = signal[:last_idx + 1]
-    """
-
-    envelope = attack_envelope(fs, duration, velocity)
-    signal *= envelope
+    #envelope = attack_envelope(fs, duration, velocity)
+    #signal *= envelope
 
     return signal
 
