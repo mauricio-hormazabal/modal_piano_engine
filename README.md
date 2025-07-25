@@ -91,6 +91,25 @@ So the contact point modifies the harmonic profile, e.g.:
 |84	|C6	|0.21|
 |96	|C7	|0.23|
 
+### ¿Qué es la resonancia simpática?
+La resonancia simpática ocurre cuando una cuerda no golpeada comienza a vibrar porque otra cuerda cercana fue excitada, y comparten frecuencias parciales comunes. 
+
+En un piano:
+* Si tocas una nota (ej. C4), y luego presionas otra (ej. G4) sin golpearla, G4 puede resonar por las frecuencias compartidas.
+* El efecto es más notable cuando el pedal de sustain está presionado (porque las cuerdas no golpeadas están “libres” para vibrar).
+* Las cuerdas vibran pasivamente por acoplamiento a través de la tabla armónica (soundboard).
+
+#### Base Teórica
+1. Acoplamiento Modal
+Cada cuerda no excitada j puede responder a la vibración de otra cuerda i, si comparten modos $f_{n_i} \approx f_{m_j}$
+Respuesta simpática:
+$s_j(t) = \sum_{m} G_{ijm} \cdot x_{i,n}(t) \cdot H_{m}(t)$
+* $G_{ijm}$: ganancia de acoplamiento modal
+* $x_{i,n}(t)$: modo excitado de la cuerda activa
+* $H_{m}(t)$: filtro resonante del modo de la cuerda receptora
+
+
+
 
 
 
