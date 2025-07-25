@@ -108,6 +108,31 @@ $s_j(t) = \sum_{m} G_{ijm} \cdot x_{i,n}(t) \cdot H_{m}(t)$
 * $x_{i,n}(t)$: modo excitado de la cuerda activa
 * $H_{m}(t)$: filtro resonante del modo de la cuerda receptora
 
+2. Filtro Resonante Pasivo
+La cuerda simpatizante no tiene ataque, solo resuena como un filtro modal:
+$y(t) = A \cdot e^{-\alpha t} \cdot \cos(2\pi f t + \phi)$
+Con amplitud muy baja, pero perceptible.
+
+3. Condición para resonancia simpática
+•	El pedal de sustain debe estar presionado o la nota simpatizante debe estar “liberada” (sin apagador).
+•	La frecuencia de algún modo debe estar lo suficientemente cercana:
+$\left| \frac{f_i}{f_j} - \frac{n}{m} \right| < \epsilon$
+
+###Enfoque de Implementación
+1.	Crear un módulo separado sympathetic_resonance.py
+2.	Función que:
+* Toma una lista de notas activas (con sus modos)
+* Toma una lista de notas “libres” (sustain ON o teclas presionadas sin atacar)
+* Agrega respuesta resonante pasiva de esas cuerdas
+
+A continuación te entrego un módulo llamado sympathetic_resonance.py, que puedes usar junto con tu motor principal de síntesis modal. Este módulo:
+* Calcula resonancias simpáticas para cuerdas no golpeadas pero libres (por pedal o tecla presionada).
+* Compara frecuencias modales de las notas activas y de las cuerdas libres.
+* Si una cuerda libre tiene modos cercanos a los de una cuerda activa, se genera una respuesta pasiva amortiguada.
+* Devuelve una señal de audio para sumarla al audio principal.
+
+
+
 
 
 
