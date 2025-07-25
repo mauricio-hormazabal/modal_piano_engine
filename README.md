@@ -100,7 +100,7 @@ En un piano:
 * Las cuerdas vibran pasivamente por acoplamiento a través de la tabla armónica (soundboard).
 
 #### Base Teórica
-1. Acoplamiento Modal
++ Acoplamiento Modal
 Cada cuerda no excitada j puede responder a la vibración de otra cuerda i, si comparten modos $f_{n_i} \approx f_{m_j}$
 Respuesta simpática:
 $s_j(t) = \sum_{m} G_{ijm} \cdot x_{i,n}(t) \cdot H_{m}(t)$
@@ -108,12 +108,12 @@ $s_j(t) = \sum_{m} G_{ijm} \cdot x_{i,n}(t) \cdot H_{m}(t)$
 * $x_{i,n}(t)$: modo excitado de la cuerda activa
 * $H_{m}(t)$: filtro resonante del modo de la cuerda receptora
 
-2. Filtro Resonante Pasivo
++ Filtro Resonante Pasivo
 La cuerda simpatizante no tiene ataque, solo resuena como un filtro modal:
 $y(t) = A \cdot e^{-\alpha t} \cdot \cos(2\pi f t + \phi)$
 Con amplitud muy baja, pero perceptible.
 
-3. Condición para resonancia simpática
++ Condición para resonancia simpática
 •	El pedal de sustain debe estar presionado o la nota simpatizante debe estar “liberada” (sin apagador).
 •	La frecuencia de algún modo debe estar lo suficientemente cercana:
 $\left| \frac{f_i}{f_j} - \frac{n}{m} \right| < \epsilon$
