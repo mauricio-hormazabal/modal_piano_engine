@@ -20,11 +20,39 @@ Características clave a implementar:
 ### ¿Qué es la Síntesis Modal?
 La síntesis modal representa un objeto vibrante (como una cuerda) como una suma de modos propios (resonancias naturales). Cada modo es un oscilador amortiguado con una frecuencia, ganancia e índice de amortiguamiento.
 
-$y_k(t) = A_k e^{-\alpha_k t} \cos(2\pi f_k t + \phi_k)yk(t)$
+$y_k(t) = A_k e^{-\alpha_k t} \cos(2\pi f_k t + \phi_k)$
 
 ### 🎵 What Is Inharmonicity?
 In an ideal string (like in a textbook), the vibration modes are harmonics:
-f$n= n \cdot f_1fn$
-where f1f_1f1 is the fundamental frequency, and nnn is an integer. This is what you'd get from a massless, perfectly flexible string under tension.
+$fn = n \cdot f_1$
+where f1 is the fundamental frequency, and n is an integer. This is what you'd get from a massless, perfectly flexible string under tension.
 But real piano strings are stiff, not ideal. That stiffness causes the overtones to be sharply instead of exactly integer multiples of the fundamental. This effect is called inharmonicity.
+
+### Why Is This Important in a Piano?
+Piano strings are made of steel and under great tension. The stiffness shifts the resonances upwards. Higher notes are slightly affected, but low and mid-range strings (especially wound bass strings) are very inharmonic.
+Inharmonicity gives the piano its "metallic" richness and makes each piano unique.
+
+#### The Formula
+Inharmonicity shifts the harmonic frequencies by a factor that depends on nnn, the overtone number.
+🎻 Inharmonic modal frequency:
+$f_n = f_1 \cdot n \cdot \sqrt{1 + B \cdot n^2}$
+Where:
+•	f1: Fundamental frequency of the string (e.g., 440 Hz)
+•	n: Overtone or mode number (1 = fundamental, 2 = first overtone, etc.)
+•	B: Inharmonicity coefficient (depends on string stiffness, diameter, tension, etc.)
+ 
+#### 🔧 How is B calculated in theory?
+If you're modeling physically (optional), you can calculate:
+$B = \frac{\pi^3 E r^4}{8 T L^2}$
+Where:
+•	EEE: Young's modulus (stiffness of the material)
+•	rrr: radius of the string
+•	TTT: tension
+•	LLL: string length
+But in practice, you can use measured or estimated values of BBB, which for pianos usually range:
+•	For bass: $B≈0.0004 $B \approx 0.0004B to 0.001$
+•	For mid-range: B≈0.0001B \approx 0.0001B≈0.0001 to 0.00040.00040.0004
+•	For high notes: B≈0.00002B \approx 0.00002B≈0.00002
+We used B=0.0002B = 0.0002B=0.0002 in the example as a reasonable mid-range value.
+
 
