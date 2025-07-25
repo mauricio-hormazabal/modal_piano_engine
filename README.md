@@ -32,7 +32,7 @@ But real piano strings are stiff, not ideal. That stiffness causes the overtones
 Piano strings are made of steel and under great tension. The stiffness shifts the resonances upwards. Higher notes are slightly affected, but low and mid-range strings (especially wound bass strings) are very inharmonic.
 Inharmonicity gives the piano its "metallic" richness and makes each piano unique.
 
-#### The Formula
+### The Formula
 Inharmonicity shifts the harmonic frequencies by a factor that depends on nnn, the overtone number.
 🎻 Inharmonic modal frequency:
 $f_n = f_1 \cdot n \cdot \sqrt{1 + B \cdot n^2}$
@@ -45,14 +45,56 @@ Where:
 If you're modeling physically (optional), you can calculate:
 $B = \frac{\pi^3 E r^4}{8 T L^2}$
 Where:
-•	EEE: Young's modulus (stiffness of the material)
-•	rrr: radius of the string
-•	TTT: tension
-•	LLL: string length
+* EEE: Young's modulus (stiffness of the material)
+* rrr: radius of the string
+* TTT: tension
+* LLL: string length
+
 But in practice, you can use measured or estimated values of BBB, which for pianos usually range:
-•	For bass: $B≈0.0004 $B \approx 0.0004B to 0.001$
-•	For mid-range: B≈0.0001B \approx 0.0001B≈0.0001 to 0.00040.00040.0004
-•	For high notes: B≈0.00002B \approx 0.00002B≈0.00002
-We used B=0.0002B = 0.0002B=0.0002 in the example as a reasonable mid-range value.
+* For bass: $B \approx 0.0004 to 0.001$
+* For mid-range: $B \approx to 0.0004$
+* For high notes: $B \approx 0.00002$
+
+IMAGEN
+
+### Interacción martillo-cuerda
+La interacción física real es no lineal: el martillo está en contacto con la cuerda por milisegundos, alterando momentáneamente la vibración. Modelos detallados lo simulan con ecuaciones diferenciales acopladas (Chaigne & Askenfelt), pero aquí usaremos una aproximación modal:
+
+#### Simplificación:
+* El martillo excita ciertos modos más que otros, según el punto de contacto.
+* Punto de contacto xxx en [0, 1] afecta cada modo n por un factor.
+#### Hammer Contact Point vs Note
+The hammer contact point is different for each note in a real piano, and it significantly affects the sound.
+
+* In a grand piano, hammers strike the string somewhere between 1/6 and 1/10 of the string length from the end (near the keyboard).
+* This location affects which overtones get emphasized or suppressed.
+* Lower notes are longer, so the contact point (in physical distance) is farther out — but proportionally, it tends to be closer to the end of the string.
+* Higher notes have hammers that strike more centrally (in proportion), exciting more harmonics.
+
+#### Why it matters in modal synthesis:
+Each modal frequency fn is shaped by $\sin(n \pi x)$, where:
+*	$x \in (0, 1)$: position of the hammer along the string.
+* This term becomes zero for some modes if the hammer hits a node of the mode shape (i.e., it doesn't excite that mode at all).
+
+So the contact point modifies the harmonic profile, e.g.:
+* Closer to the bridge → fewer high harmonics
+* Closer to the center → brighter, more harmonic-rich sound
+
+#### Example contact points (approximate, normalized):
+|MIDI |Note	Note Name	|Contact Point (x)|
+|---|----|------|
+|21	|A0	|0.10|
+|36	|C2	|0.13|
+|48	|C3	|0.15|
+|60	|C4	|0.17|
+|72	|C5	|0.19|
+|84	|C6	|0.21|
+|96	|C7	|0.23|
+
+
+
+
+
+
 
 
