@@ -100,7 +100,13 @@ class AudioEngine:
                                                     mod_bank=self.modal_bank,
                                                     hammer_matrix=self.hammer_matrix)
             
-
+            '''
+            The new version of this function is located in core/util
+            /sympathetic_utils.py, and calculates specific weights for each resonant mode in a more realistic way. 
+            There is also a version that calculates an "average" weight from the weights calculated for each mode. 
+            It has not yet been incorporated because it does not yet use the precomputed sines in the 
+            /engine/util /precomputed_modal_bank.py module.
+            '''
             resonance = generate_sympathetic_response(self.fs, midi_note, velocity, 
                                                       self.active_notes, self.inharmonicity_matrix_res,
                                                       gd_values=self.hammer_gain_decay, 

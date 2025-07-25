@@ -45,6 +45,7 @@ def generate_sympathetic_response(fs, midi_note, velocity, active_notes,
         phase = np.pi / 2
 
         for n in range(1, num_modes + 1):
+            
             #f_n = f0 * n * inh_matrix[midi_note][n]
             #print (f"B Coef: {inh_matrix[midi_note][n]}")
             alpha = decay * n
