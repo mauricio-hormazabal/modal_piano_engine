@@ -1,6 +1,14 @@
 modal_piano_engine
 # Modal Piano Engine
 
+## NOTE
+
+This project is in an early alpha version. It doesn't sound good, nor does it aim to or allow real-time play, but it provides a theoretical and practical basis for understanding this type of synthesis and how it relates to real piano parameters, such as inharmonicity, resonance gain, duration, etc.
+
+It is functional in terms of MIDI interface and receives NOTE ON and NOTE OFF events from any type of MIDI controller.
+
+The source code is not structured in the best way, nor does it incorporate major optimizations other than precalculating some cosines and exponentials.
+
 ## Visión General del Proyecto
 ### Objetivo
 Crear un motor de síntesis física de piano de cola en tiempo real, con énfasis en fidelidad sonora.
@@ -111,11 +119,12 @@ $s_j(t) = \sum_{m} G_{ijm} \cdot x_{i,n}(t) \cdot H_{m}(t)$
 ##### Filtro Resonante Pasivo
 La cuerda simpatizante no tiene ataque, solo resuena como un filtro modal:
 $y(t) = A \cdot e^{-\alpha t} \cdot \cos(2\pi f t + \phi)$
+
 Con amplitud muy baja, pero perceptible.
 
 ##### Condición para resonancia simpática
-•	El pedal de sustain debe estar presionado o la nota simpatizante debe estar “liberada” (sin apagador).
-•	La frecuencia de algún modo debe estar lo suficientemente cercana:
+* El pedal de sustain debe estar presionado o la nota simpatizante debe estar “liberada” (sin apagador).
+* La frecuencia de algún modo debe estar lo suficientemente cercana:
 $\left| \frac{f_i}{f_j} - \frac{n}{m} \right| < \epsilon$
 
 #### Enfoque de Implementación
