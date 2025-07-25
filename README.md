@@ -15,4 +15,4 @@ Características clave a implementar:
 7.	Control desde un escaneo de teclado (interfaz MIDI u otro hardware)
 8.	Ejecutarse en tiempo real (bajo consumo)
 
-y_k(t) = A_k e^{-\alpha_k t} \cos(2\pi f_k t + \phi_k)yk(t
+y_k(t) = A_k e^{-\alpha_k t} \cos(2\pi f_k t + \phi_k)yk(t)
