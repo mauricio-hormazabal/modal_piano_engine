@@ -3,30 +3,31 @@ modal_piano_engine
 
 ## NOTE
 
-This project is in an early alpha version. It doesn't sound good, nor does it aim to or allow real-time play, but it provides a theoretical and practical basis for understanding this type of synthesis and how it relates to real piano parameters, such as inharmonicity, resonance gain, duration, etc.
+This project is in an early alpha version (no release). It doesn't sound good, nor does it aim to or allow real-time play, but it provides a theoretical and practical basis for understanding this type of synthesis and how it relates to real piano parameters, such as inharmonicity, resonance gain, duration, etc.
 
 It is functional in terms of MIDI interface and receives NOTE ON and NOTE OFF events from any type of MIDI controller.
 
 The source code is not structured in the best way, nor does it incorporate major optimizations other than precalculating some cosines and exponentials.
 
-## Visión General del Proyecto
-### Objetivo
-Crear un motor de síntesis física de piano de cola en tiempo real, con énfasis en fidelidad sonora.
+## Project Overview
+### Objective
 
-Características clave a implementar:
-1.	Modelo modal de las cuerdas (por tecla) 
-2.	Modelado de inarmonía (tensión y rigidez de cuerdas)
-3.	Resonancias simpáticas entre cuerdas
-4.	Interacción con tabla armónica (soundboard)
-5.	Resonancia de caja (cabinet response)
-6.	Soporte para polifonía completa (88 teclas)
-7.	Control desde un escaneo de teclado (interfaz MIDI u otro hardware)
-8.	Ejecutarse en tiempo real (bajo consumo)
+To create a real-time physical synthesis engine for a grand piano, with an emphasis on sound fidelity.
 
-1, 2, 3, 6, 7 y 8 se encuentran en una primera versión básica, pero funcional. Mas que un piano de cola, suena similar a los modelos de piano "brillante" de los sintetizadores de los años 80s.
+Key features to implement:
 
-### ¿Qué es la Síntesis Modal?
-La síntesis modal representa un objeto vibrante (como una cuerda) como una suma de modos propios (resonancias naturales). Cada modo es un oscilador amortiguado con una frecuencia, ganancia e índice de amortiguamiento.
+1. Modal model of the strings (per key)
+2. Inharmonicity modeling (string tension and stiffness)
+3. Sympathetic resonances between strings
+4. Interaction with the soundboard
+5. Cabinet resonance (cabinet response)
+6. Support for full polyphony (88 keys)
+7. Control via keyboard scanning (MIDI interface or other hardware)
+8. Run in real time (low resource consumption)
+9. Features 1, 2, 3, 6, 7, and 8 are present in an initial, basic but functional version. Rather than sounding like a grand piano, it resembles the "bright" piano models found in 1980s synthesizers.
+
+### What is Modal Synthesis?
+Modal synthesis represents a vibrating object (such as a string) as a sum of its eigenmodes (natural resonances). Each mode is a damped oscillator with its own frequency, gain, and damping coefficient.
 
 $y_k(t) = A_k e^{-\alpha_k t} \cos(2\pi f_k t + \phi_k)$
 
@@ -65,12 +66,14 @@ But in practice, you can use measured or estimated values of BBB, which for pian
 
 IMAGEN
 
-### Interacción martillo-cuerda
-La interacción física real es no lineal: el martillo está en contacto con la cuerda por milisegundos, alterando momentáneamente la vibración. Modelos detallados lo simulan con ecuaciones diferenciales acopladas (Chaigne & Askenfelt), pero aquí usaremos una aproximación modal:
+### Hammer-String Interaction
+The real physical interaction is non-linear: the hammer is in contact with the string for only milliseconds, momentarily altering the vibration. Detailed models simulate this with coupled differential equations (Chaigne & Askenfelt), but here we will use a modal approximation.
 
-#### Simplificación:
-* El martillo excita ciertos modos más que otros, según el punto de contacto.
-* Punto de contacto xxx en [0, 1] afecta cada modo n por un factor.
+#### Simplification:
+
+* The hammer excites certain modes more than others, depending on the contact point.
+* The contact point xxx in [0, 1] affects each mode n by a factor.
+
 #### Hammer Contact Point vs Note
 The hammer contact point is different for each note in a real piano, and it significantly affects the sound.
 
@@ -99,13 +102,14 @@ So the contact point modifies the harmonic profile, e.g.:
 |84	|C6	|0.21|
 |96	|C7	|0.23|
 
-### ¿Qué es la resonancia simpática?
-La resonancia simpática ocurre cuando una cuerda no golpeada comienza a vibrar porque otra cuerda cercana fue excitada, y comparten frecuencias parciales comunes. 
+### What is sympathetic resonance?
+Sympathetic resonance occurs when an unstruck string begins to vibrate because another nearby string was excited and they share common partial frequencies.
 
-En un piano:
-* Si tocas una nota (ej. C4), y luego presionas otra (ej. G4) sin golpearla, G4 puede resonar por las frecuencias compartidas.
-* El efecto es más notable cuando el pedal de sustain está presionado (porque las cuerdas no golpeadas están “libres” para vibrar).
-* Las cuerdas vibran pasivamente por acoplamiento a través de la tabla armónica (soundboard).
+In a piano:
+
+* If you play a note (e.g., C4), and then press another (e.g., G4) without striking it, G4 may resonate because of the shared frequencies.
+* The effect is more noticeable when the sustain pedal is pressed (because the unstruck strings are “free” to vibrate).
+* The strings vibrate passively through coupling via the soundboard.
 
 #### Base Teórica
 ##### Acoplamiento Modal
@@ -127,17 +131,21 @@ Con amplitud muy baja, pero perceptible.
 * La frecuencia de algún modo debe estar lo suficientemente cercana:
 $\left| \frac{f_i}{f_j} - \frac{n}{m} \right| < \epsilon$
 
-#### Enfoque de Implementación
+#### Implementation Approach
 
-* Toma una lista de notas activas (con sus modos)
-* Toma una lista de notas “libres” (sustain ON o teclas presionadas sin atacar)
-* Agrega respuesta resonante pasiva de esas cuerdas
+* Take a list of active notes (with their modes)
 
+* Take a list of “free” notes (sustain ON or keys pressed without striking)
 
-* Calcular resonancias simpáticas para cuerdas no golpeadas pero libres (por pedal o tecla presionada).
-* Comparar frecuencias modales de las notas activas y de las cuerdas libres.
-* Si una cuerda libre tiene modos cercanos a los de una cuerda activa, se genera una respuesta pasiva amortiguada.
-* Devolver una señal de audio para sumarla al audio principal.
+* Add passive resonant response from those strings
+
+* Calculate sympathetic resonances for unstruck but free strings (by pedal or pressed key).
+
+* Compare modal frequencies of the active notes and the free strings.
+
+* If a free string has modes close to those of an active string, a damped passive response is generated.
+
+* Return an audio signal to be added to the main audio.
 
 
 
